@@ -23,7 +23,7 @@ export const BookingProvider = ({ children }) => {
 
   console.log(selectedSeat);
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate:bookSeat, isLoading } = useMutation({
     mutationFn: async () => {
       const seatIds = selectedSeat?.map((seat) => seat._id);
 
@@ -41,6 +41,7 @@ export const BookingProvider = ({ children }) => {
     },
 
     onSuccess: (data) => {
+      setSelectedSeat([])
       notifications.show({
         color: "green.3",
         title: "Success",
@@ -65,7 +66,8 @@ export const BookingProvider = ({ children }) => {
         selectedSeat,
         setSelectedSeat,
         isAuthenticated,
-        setNameOfClass
+        setNameOfClass,
+        bookSeat
       }}
     >
       {children}

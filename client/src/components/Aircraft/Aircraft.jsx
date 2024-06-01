@@ -14,7 +14,7 @@ const Aircraft = () => {
   const [searchParams] = useSearchParams();
   const nameOfClass = searchParams.get("class");
   const navigate = useNavigate();
-  const { isAuthenticated, setNameOfClass } = useBooking();
+  const { isAuthenticated, setNameOfClass, selectedSeat } = useBooking();
 
   const { data, isLoading, error } = useQuery({
     queryFn: async () => {
@@ -23,7 +23,7 @@ const Aircraft = () => {
       );
       return data;
     },
-   
+
     queryKey: ["aircraft", id],
   });
 
@@ -61,7 +61,7 @@ const Aircraft = () => {
     <div className=" border-l-2 border-indigo-500 h-full w-full flex flex-col items-center pt-4">
       <h1 className="text-3xl font-bold underline">{data?.name}</h1>
 
-      {/* <ClassDefination /> */}
+      <ColorDefination />
 
       <div className="flex mt-10 gap-10 overflow-hidden">
         <div>
@@ -92,14 +92,14 @@ const Aircraft = () => {
             );
           })}
 
-          <div className="flex justify-center">
+          {selectedSeat.length > 0 && (
             <button
               onClick={proceedToBooking}
               className="bg-[#4287f5] hover:bg-orange-700 text-white px-10 py-2 rounded-md"
             >
               Proceed to booking
             </button>
-          </div>
+          )}
         </div>
 
         <div className="flex flex-col overflow-y-scroll">
@@ -114,24 +114,39 @@ const Aircraft = () => {
   );
 };
 
-// const ClassDefination = () => {
-//   return (
-//     <div className="flex gap-3 my-5">
-//       {classColorData.map((item, i) => {
-//         return (
-//           <div key={i} className="flex items-center gap-2 ">
-//             <div
-//               style={{
-//                 backgroundColor: item.color,
-//               }}
-//               className={`w-2 h-2 rounded-full`}
-//             ></div>
-//             <Text className="text-sm">{item.name}</Text>
-//           </div>
-//         );
-//       })}
-//     </div>
-//   );
-// };
+const colorData = [
+  {
+    name: "Selected",
+    color: "#8DB6F7",
+  },
+  {
+    name: "Booked",
+    color: "gray",
+  },
+  {
+    name: "Locked",
+    color: "pink",
+  },
+];
+
+const ColorDefination = () => {
+  return (
+    <div className="flex gap-3 my-5">
+      {colorData.map((item, i) => {
+        return (
+          <div key={i} className="flex items-center gap-2 ">
+            <div
+              style={{
+                backgroundColor: item.color,
+              }}
+              className={`w-2 h-2 rounded-full`}
+            ></div>
+            <Text className="text-sm">{item.name}</Text>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 export default Aircraft;

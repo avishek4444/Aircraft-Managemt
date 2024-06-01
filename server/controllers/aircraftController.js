@@ -12,13 +12,13 @@ import aircraftModel from "../models/aircraftModel.js";
 //   }
 // };
 
-const generateSeats = (numOfSeats) => {
+const generateSeats = (numOfSeats, seatPrice) => {
   const seats = [];
   for (let i = 1; i <= numOfSeats; i++) {
     seats.push({
       id: `${i}`,
       seatStatus: "available",
-      seatPrice: 0,
+      seatPrice: seatPrice,
       passengerDetails: null,
     });
   }
@@ -32,7 +32,7 @@ const createAircraft = async (req, res) => {
     // Generate seats for each class
     if (data.seatClass.firstClass && data.seatClass.firstClass.numOfSeats) {
       data.seatClass.firstClass.seats = generateSeats(
-        data.seatClass.firstClass.numOfSeats
+        data.seatClass.firstClass.numOfSeats, data.seatClass.firstClass.price
       );
     }
     if (
@@ -40,12 +40,12 @@ const createAircraft = async (req, res) => {
       data.seatClass.businessClass.numOfSeats
     ) {
       data.seatClass.businessClass.seats = generateSeats(
-        data.seatClass.businessClass.numOfSeats
+        data.seatClass.businessClass.numOfSeats, data.seatClass.businessClass.price
       );
     }
     if (data.seatClass.economyClass && data.seatClass.economyClass.numOfSeats) {
       data.seatClass.economyClass.seats = generateSeats(
-        data.seatClass.economyClass.numOfSeats
+        data.seatClass.economyClass.numOfSeats , data.seatClass.economyClass.price
       );
     }
 

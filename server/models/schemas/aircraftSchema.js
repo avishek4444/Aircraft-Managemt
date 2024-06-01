@@ -52,6 +52,10 @@ const classSchema = new Schema(
       type: Number,
       required: false,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
     seats: [seatSchema],
   },
   { _id: true }
