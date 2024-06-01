@@ -3,24 +3,39 @@ import { useBooking } from "context/BookingContext";
 const Checkout = () => {
   const { selectedSeat, bookSeat } = useBooking();
 
-  console.log(selectedSeat);
+  // Define a function to calculate the total price
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    selectedSeat.forEach((item) => {
+      // Assuming there is a price property in each selected seat item
+      totalPrice += item.seatPrice;
+    });
+    return totalPrice;
+  };
 
-  console.log(selectedSeat);
   return (
-    <div className="text-center py-10">
+    <div className="text-center py-10 w-50 mx-auto">
       <h1 className="text-2xl font-semibold">Checkout Your Booking!</h1>
 
-      <div>
-        <h2>Booking Details</h2>
-        {selectedSeat.map((item , index) => {
-          return (
-            <div key={index}>
-              <p>{item.seatName}</p>
-            </div>
-          );
-        })}
-      </div>
+      <div className="mt-10">
+        <h2 className="mb-5">Booking Details</h2>
 
+        <div>
+          {selectedSeat.map((item, index) => {
+            return (
+              <div key={index} className="border border-black">
+                <p>
+                  {item.seatName} - {item.seatClass}
+                </p>
+                {/* Assuming there is a price property in each selected seat item */}
+                <p>Price: ${item.seatPrice}</p>
+              </div>
+            );
+          })}
+        </div>
+        {/* Display the total price */}
+        <h2>Total Price: ${calculateTotalPrice()}</h2>
+      </div>
     </div>
   );
 };
