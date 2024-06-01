@@ -19,6 +19,7 @@ const Checkout = () => {
 
       <div className="mt-10">
         <h2 className="mb-5">Booking Details</h2>
+        <h1>hell0 avishek</h1>
 
         <div>
           {selectedSeat.map((item, index) => {
