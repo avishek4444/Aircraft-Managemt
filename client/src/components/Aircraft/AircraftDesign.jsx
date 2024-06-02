@@ -86,31 +86,38 @@ const AircraftDesign = ({ seatClassData }) => {
                 );
                 const isBooked = item.seatStatus === "booked";
                 const isAvailable = item.seatStatus === "available";
-                const isLocked = item.seatStatus === "locked";
+                const isLocked = item.locked === true;
                 const seatName = getSeatName(rowIndex, colIndex);
 
                 return (
                   <Tooltip.Floating
                     key={colIndex}
                     multiline
-                    label={`Seat: ${seatName} | Status: ${item.seatStatus} | Price: $${item.seatPrice}`}
+                    label={`Seat: ${seatName} | Status: ${
+                      item.locked ? "locked" : item.seatStatus
+                    } | Price: $${item.seatPrice}`}
                   >
                     <div
                       key={colIndex}
                       className="m-2 hover:!bg-[#8db6f7]"
-                      onClick={() => selectAndUnselectSeats(item?._id, seatName)}
+                      onClick={() =>
+                        selectAndUnselectSeats(item?._id, seatName)
+                      }
                     >
                       <button
                         style={{
-                          backgroundColor: isSelected
+                          backgroundColor: isLocked
+                            ? "pink"
+                            : isSelected
                             ? "#8db6f7"
                             : isBooked
                             ? "black"
                             : seatColor,
-                          opacity: isBooked && "0.5",
-                          cursor: isBooked ? "not-allowed" : "pointer",
+                          opacity: (isBooked || isLocked) && "0.5",
+                          cursor:
+                            isBooked || isLocked ? "not-allowed" : "pointer",
                         }}
-                        disabled={isBooked}
+                        disabled={isBooked || isLocked}
                         className={`${seatClassName} hover:bg-[#8db6f7] text-white`}
                       >
                         {seatName}
@@ -131,30 +138,37 @@ const AircraftDesign = ({ seatClassData }) => {
                 );
                 const isBooked = item.seatStatus === "booked";
                 const isAvailable = item.seatStatus === "available";
-                const isLocked = item.seatStatus === "locked";
+                const isLocked = item.locked === true;
                 const seatName = getSeatName(rowIndex, colIndex + numColumns);
 
                 return (
                   <Tooltip.Floating
                     key={colIndex}
-                    label={`Seat: ${seatName} | Status: ${item.seatStatus} | Price: $${item.seatPrice}`}
+                    label={`Seat: ${seatName} | Status: ${
+                      item.locked ? "locked" : item.seatStatus
+                    } | Price: $${item.seatPrice}`}
                   >
                     <div
                       key={colIndex}
                       className="m-2"
-                      onClick={() => selectAndUnselectSeats(item?._id, seatName)}
+                      onClick={() =>
+                        selectAndUnselectSeats(item?._id, seatName)
+                      }
                     >
                       <button
                         style={{
-                          backgroundColor: isSelected
-                            ? "#8db6f7"
-                            : isBooked
-                            ? "black"
-                            : seatColor,
-                          opacity: isBooked && "0.5",
-                          cursor: isBooked ? "not-allowed" : "pointer",
+                          backgroundColor: isLocked
+                          ? "pink"
+                          : isSelected
+                          ? "#8db6f7"
+                          : isBooked
+                          ? "black"
+                          : seatColor,
+                          opacity: (isBooked || isLocked) && "0.5",
+                          cursor:
+                            isBooked || isLocked ? "not-allowed" : "pointer",
                         }}
-                        disabled={isBooked}
+                        disabled={isBooked || isLocked}
                         className={`${seatClassName} text-white`}
                       >
                         {seatName}

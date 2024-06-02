@@ -17,7 +17,7 @@ const Aircraft = () => {
   const nameOfClass = searchParams.get("class");
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
-  const { setNameOfClass, selectedSeat, setAircraftId } = useBooking();
+  const { setNameOfClass, selectedSeat, setAircraftId, lockSeat } = useBooking();
 
   const { data, isLoading, error } = useQuery({
     queryFn: async () => {
@@ -27,13 +27,15 @@ const Aircraft = () => {
       return data;
     },
 
-    queryKey: ["aircraft", id],
+    queryKey: ["aircraft", id, "bla"],
+    
   });
 
   const proceedToBooking = () => {
     if (isAuthenticated) {
       setNameOfClass(nameOfClass);
       setAircraftId(id)
+      lockSeat(id)
       return navigate("/checkout/" + id);
     } else {
       navigate("/login?navigate=true");
