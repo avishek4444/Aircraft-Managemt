@@ -192,7 +192,7 @@ const bookSeat = async (req, res) => {
     let bookedSeats = [];
 
     // Check and book seats
-    seatIds.forEach((seatId) => {
+    for (let seatId of seatIds) {
       let seatFound = false;
       for (let className of seatClasses) {
         const seats = airCraft.seatClass[className]?.seats || [];
@@ -200,9 +200,11 @@ const bookSeat = async (req, res) => {
 
         if (seat) {
           seatFound = true;
-          if (seat.seatStatus !== "available" || seat.locked) {
+          if (seat.seatStatus !== "available") {
             allSeatsAvailable = false;
           } else {
+            seat.locked = false;
+            seat.lockTimestamp = null;
             seat.seatStatus = "booked";
             seat.passengerDetails = personData;
             airCraft.seatClass[className].availableSeats -= 1;
@@ -214,7 +216,7 @@ const bookSeat = async (req, res) => {
       if (!seatFound) {
         allSeatsAvailable = false;
       }
-    });
+    }
 
     if (!allSeatsAvailable) {
       return res.status(400).json({ error: "One or more seats are not available or locked" });
@@ -226,6 +228,7 @@ const bookSeat = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 const searchAircraft = async (req, res) => {
   const {

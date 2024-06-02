@@ -59,6 +59,7 @@ export const BookingProvider = ({ children }) => {
       });
     },
     queryKey: ["aircraft", aircraftId],
+    mutationKey: "bla"
   });
 
   const {mutate:lockSeat, isLoading} = useMutation({
@@ -87,6 +88,7 @@ export const BookingProvider = ({ children }) => {
       });
     },
     queryKey: ["aircraft", aircraftId],
+    mutationKey: "bla"
   })
 
   return (

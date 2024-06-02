@@ -106,12 +106,12 @@ const AircraftDesign = ({ seatClassData }) => {
                     >
                       <button
                         style={{
-                          backgroundColor: isLocked
+                          backgroundColor: isBooked
+                            ? "black"
+                            : isLocked 
                             ? "pink"
                             : isSelected
                             ? "#8db6f7"
-                            : isBooked
-                            ? "black"
                             : seatColor,
                           opacity: (isBooked || isLocked) && "0.5",
                           cursor:
@@ -158,12 +158,12 @@ const AircraftDesign = ({ seatClassData }) => {
                       <button
                         style={{
                           backgroundColor: isLocked
-                          ? "pink"
-                          : isSelected
-                          ? "#8db6f7"
-                          : isBooked
-                          ? "black"
-                          : seatColor,
+                            ? "pink"
+                            : isSelected
+                            ? "#8db6f7"
+                            : isBooked
+                            ? "black"
+                            : seatColor,
                           opacity: (isBooked || isLocked) && "0.5",
                           cursor:
                             isBooked || isLocked ? "not-allowed" : "pointer",

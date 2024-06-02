@@ -47,10 +47,12 @@ const seatSchema = new Schema(
     locked: {
       type: Boolean,
       default: false,
+      required: false,
     },
     lockTimestamp: {
       type: Date,
       default: null,
+      required: false,
     },
   },
   { _id: true }
