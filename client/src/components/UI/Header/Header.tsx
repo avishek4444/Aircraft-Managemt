@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Container, Group, Burger } from "@mantine/core";
+import { Container, Group, Burger, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./HeaderSimple.module.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,14 +25,15 @@ export default function HeaderSimple() {
         <Link to="/">
           <h2 className="font-semibold">Aircraft System</h2>
         </Link>
-        <Group gap={5} visibleFrom="xs">
+        <Group gap={10} visibleFrom="xs">
+          {isAuthenticated && <Button>Booking History</Button>}
           {isAuthenticated ? (
-            <button
+            <Button
               onClick={logout}
               className="font-semibold bg-red-500 py-1 px-2 rounded-sm text-white"
             >
               Logout
-            </button>
+            </Button>
           ) : (
             <Link
               to="/login"

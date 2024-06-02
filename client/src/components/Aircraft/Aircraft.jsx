@@ -9,12 +9,15 @@ import { IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useBooking } from "context/BookingContext";
 
+import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
+
 const Aircraft = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const nameOfClass = searchParams.get("class");
   const navigate = useNavigate();
-  const { isAuthenticated, setNameOfClass, selectedSeat } = useBooking();
+  const isAuthenticated = useIsAuthenticated();
+  const { setNameOfClass, selectedSeat, setAircraftId } = useBooking();
 
   const { data, isLoading, error } = useQuery({
     queryFn: async () => {
@@ -30,6 +33,7 @@ const Aircraft = () => {
   const proceedToBooking = () => {
     if (isAuthenticated) {
       setNameOfClass(nameOfClass);
+      setAircraftId(id)
       return navigate("/checkout/" + id);
     } else {
       navigate("/login?navigate=true");

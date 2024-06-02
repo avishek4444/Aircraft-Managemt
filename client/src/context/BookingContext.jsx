@@ -11,21 +11,21 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { useMutation } from "react-query";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
-import { useParams } from "react-router-dom";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
 export const BookingProvider = ({ children }) => {
-  const { id: aircraftId } = useParams();
+  
   const auth = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
   const [selectedSeat, setSelectedSeat] = useState([]);
   const [nameOfClass, setNameOfClass] = useState("")
-
-  console.log(selectedSeat);
+  const [aircraftId, setAircraftId] = useState("")
 
   const { mutate:bookSeat, isLoading } = useMutation({
     mutationFn: async () => {
       const seatIds = selectedSeat?.map((seat) => seat._id);
+      const seatName = selectedSeat?.map((seat) => seat.seatName)
+      const seatClass = selectedSeat?.map((seat) => seat.seatClass)
 
       const userData = {
         name: auth.name,
@@ -37,6 +37,7 @@ export const BookingProvider = ({ children }) => {
         seatIds: seatIds,
         seatClassName: nameOfClass,
         personData: userData,
+  
       });
     },
 
@@ -67,7 +68,8 @@ export const BookingProvider = ({ children }) => {
         setSelectedSeat,
         isAuthenticated,
         setNameOfClass,
-        bookSeat
+        bookSeat,
+        setAircraftId
       }}
     >
       {children}

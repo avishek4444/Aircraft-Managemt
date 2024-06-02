@@ -9,8 +9,6 @@ const AircraftDesign = ({ seatClassData }) => {
   // Determine the number of columns on each side based on the class type
   const numColumns = seatClassData?.name === "First Class" ? 2 : 3;
 
-
-
   // Split the data into two equal groups
   const halfLength = Math.ceil(aircraftData?.length / 2);
   const leftColumn = aircraftData?.slice(0, halfLength);
@@ -28,19 +26,19 @@ const AircraftDesign = ({ seatClassData }) => {
   const leftRows = createRows(leftColumn);
   const rightRows = createRows(rightColumn);
 
-    // Determine the starting row number based on the class name
-    const getStartingRowNumber = () => {
-      if (seatClassData?.name === "First Class") {
-        return 1;
-      } else if (seatClassData?.name === "Business Class") {
-        return leftRows.length; // assuming after First Class ends at 4
-      } else if (seatClassData?.name === "Economy Class") {
-        return 8; // Assuming Business Class ends at 8
-      }
+  // Determine the starting row number based on the class name
+  const getStartingRowNumber = () => {
+    if (seatClassData?.name === "First Class") {
       return 1;
-    };
-  
-    const startingRowNumber = getStartingRowNumber();
+    } else if (seatClassData?.name === "Business Class") {
+      return leftRows.length; // assuming after First Class ends at 4
+    } else if (seatClassData?.name === "Economy Class") {
+      return 8; // Assuming Business Class ends at 8
+    }
+    return 1;
+  };
+
+  const startingRowNumber = getStartingRowNumber();
 
   const seatColor =
     (seatClassData?.name === "First Class" && "red") ||
@@ -57,6 +55,12 @@ const AircraftDesign = ({ seatClassData }) => {
         prevState.filter((seat) => seat?._id !== seatId)
       );
     } else {
+      // Check if the user has already selected 6 seats
+      if (selectedSeat.length >= 6) {
+        alert("You can select a maximum of 6 seats.");
+        return;
+      }
+
       // Select the seat if it's not already selected
       const newSelectedSeat = aircraftData.find((c) => c?._id === seatId);
       newSelectedSeat.seatName = seatName;

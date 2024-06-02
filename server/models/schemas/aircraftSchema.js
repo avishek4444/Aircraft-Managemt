@@ -30,9 +30,27 @@ const seatSchema = new Schema(
       type: Number,
       required: false,
     },
+    seatName: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    seatClass: {
+      type: String,
+      required: false,
+      default: null,
+    },
     passengerDetails: {
       type: passengerDetailsSchema,
       required: false,
+    },
+    locked: {
+      type: Boolean,
+      default: false,
+    },
+    lockTimestamp: {
+      type: Date,
+      default: null,
     },
   },
   { _id: true }
