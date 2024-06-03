@@ -31,9 +31,10 @@ const createAircraft = async (req, res) => {
         data.seatClass.firstClass.price,
 
         data.seatClass.firstClass.seatName,
-        data.seatClass.firstClass.seatClass,
+        data.seatClass.firstClass.seatClass
       );
-      data.seatClass.firstClass.availableSeats = data.seatClass.firstClass.numOfSeats;
+      data.seatClass.firstClass.availableSeats =
+        data.seatClass.firstClass.numOfSeats;
     }
     if (
       data.seatClass.businessClass &&
@@ -43,18 +44,20 @@ const createAircraft = async (req, res) => {
         data.seatClass.businessClass.numOfSeats,
         data.seatClass.businessClass.price,
         data.seatClass.businessClass.seatName,
-        data.seatClass.businessClass.seatClass,
+        data.seatClass.businessClass.seatClass
       );
-      data.seatClass.businessClass.availableSeats = data.seatClass.businessClass.numOfSeats;
+      data.seatClass.businessClass.availableSeats =
+        data.seatClass.businessClass.numOfSeats;
     }
     if (data.seatClass.economyClass && data.seatClass.economyClass.numOfSeats) {
       data.seatClass.economyClass.seats = generateSeats(
         data.seatClass.economyClass.numOfSeats,
         data.seatClass.economyClass.price,
         data.seatClass.economyClass.seatName,
-        data.seatClass.economyClass.seatClass,
+        data.seatClass.economyClass.seatClass
       );
-      data.seatClass.economyClass.availableSeats = data.seatClass.economyClass.numOfSeats;
+      data.seatClass.economyClass.availableSeats =
+        data.seatClass.economyClass.numOfSeats;
     }
 
     const airCraft = await aircraftModel.insertMany([data]); // Changed to an array for insertMany
@@ -101,11 +104,15 @@ const lockSeat = async (req, res) => {
       }
 
       if (!seat) {
-        return res.status(404).json({ error: `Seat with ID ${seatId} not found` });
+        return res
+          .status(404)
+          .json({ error: `Seat with ID ${seatId} not found` });
       }
 
       if (seat.locked) {
-        return res.status(400).json({ error: `Seat with ID ${seatId} is already locked` });
+        return res
+          .status(400)
+          .json({ error: `Seat with ID ${seatId} is already locked` });
       }
 
       seat.locked = true;
@@ -117,7 +124,11 @@ const lockSeat = async (req, res) => {
         const seats = airCraft.seatClass?.[seatClassName]?.seats || [];
         const seat = seats.find((s) => s.id === seatId);
 
-        if (seat && seat.locked && new Date() - new Date(seat.lockTimestamp) >= 10 * 60 * 1000) {
+        if (
+          seat &&
+          seat.locked &&
+          new Date() - new Date(seat.lockTimestamp) >= 10 * 60 * 1000
+        ) {
           seat.locked = false;
           seat.lockTimestamp = null;
           await airCraft.save();
@@ -158,11 +169,15 @@ const unlockSeat = async (req, res) => {
       }
 
       if (!seat) {
-        return res.status(404).json({ error: `Seat with ID ${seatId} not found` });
+        return res
+          .status(404)
+          .json({ error: `Seat with ID ${seatId} not found` });
       }
 
       if (!seat.locked) {
-        return res.status(400).json({ error: `Seat with ID ${seatId} is not locked` });
+        return res
+          .status(400)
+          .json({ error: `Seat with ID ${seatId} is not locked` });
       }
 
       seat.locked = false;
@@ -171,14 +186,16 @@ const unlockSeat = async (req, res) => {
     }
 
     await airCraft.save();
-    res.status(200).json({ message: "Seats unlocked successfully", unlockedSeats });
+    res
+      .status(200)
+      .json({ message: "Seats unlocked successfully", unlockedSeats });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 const bookSeat = async (req, res) => {
-  const { id, seatIds, personData } = req.body;
+  const { id, seatIds, personData, seatName, seatClass } = req.body;
   console.log(id, seatIds, personData);
 
   try {
@@ -192,8 +209,12 @@ const bookSeat = async (req, res) => {
     let bookedSeats = [];
 
     // Check and book seats
-    for (let seatId of seatIds) {
+    for (let i = 0; i < seatIds.length; i++) {
+      let seatId = seatIds[i];
+      let seatClassValue = seatClass[i];
+      let seatNameValue = seatName[i];
       let seatFound = false;
+
       for (let className of seatClasses) {
         const seats = airCraft.seatClass[className]?.seats || [];
         const seat = seats.find((seat) => seat.id === seatId);
@@ -207,23 +228,30 @@ const bookSeat = async (req, res) => {
             seat.lockTimestamp = null;
             seat.seatStatus = "booked";
             seat.passengerDetails = personData;
+            seat.seatClass = seatClassValue; // Update seat class
+            seat.seatName = seatNameValue;   // Update seat name
             airCraft.seatClass[className].availableSeats -= 1;
             bookedSeats.push(seat);
           }
           break;
         }
       }
+
       if (!seatFound) {
         allSeatsAvailable = false;
       }
     }
 
     if (!allSeatsAvailable) {
-      return res.status(400).json({ error: "One or more seats are not available or locked" });
+      return res
+        .status(400)
+        .json({ error: "One or more seats are not available or locked" });
     }
 
     await airCraft.save();
-    res.status(200).json({ message: "Seats booked successfully", seats: bookedSeats });
+    res
+      .status(200)
+      .json({ message: "Seats booked successfully", seats: bookedSeats });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -267,6 +295,41 @@ const searchAircraft = async (req, res) => {
   }
 };
 
+const getSeatsBookedByUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const airCrafts = await aircraftModel.find({
+      "seatClass.firstClass.seats.passengerDetails.userId": userId,
+    }).lean(); // Optional: .lean() to return plain JavaScript objects instead of Mongoose documents
+
+    let bookedSeats = [];
+
+    airCrafts.forEach((airCraft) => {
+      const seatClasses = ["firstClass", "businessClass", "economyClass"];
+      seatClasses.forEach((className) => {
+        const seats = airCraft.seatClass[className]?.seats || [];
+        seats.forEach((seat) => {
+          if (seat.passengerDetails && seat.passengerDetails.userId === userId) {
+            bookedSeats.push({
+              aircraftName: airCraft.name,
+              
+              seat,
+            });
+          }
+        });
+      });
+    });
+
+    res.status(200).json(bookedSeats);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+
 export {
   getAllAircraft,
   createAircraft,
@@ -275,4 +338,5 @@ export {
   bookSeat,
   lockSeat,
   unlockSeat,
+  getSeatsBookedByUser
 };

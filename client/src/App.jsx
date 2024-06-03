@@ -12,6 +12,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Notifications } from "@mantine/notifications";
 import Checkout from "components/Checkout/Checkout";
 import {BookingProvider} from "./context/BookingContext";
+import BookingHistory from "./components/BookingHistory/BookingHistory";
+
 
 
 import "@mantine/notifications/styles.css";
@@ -35,6 +37,7 @@ function App() {
             </Route>
             <Route path="login" element={<Login />} />
             <Route path="checkout/:id" element={<Checkout />} />
+            <Route path="bookinghistory" element={<BookingHistory />} />
           </Route>
           <Route
             path="*"

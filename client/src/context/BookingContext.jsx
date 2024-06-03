@@ -37,7 +37,8 @@ export const BookingProvider = ({ children }) => {
         seatIds: seatIds,
         seatClassName: nameOfClass,
         personData: userData,
-  
+        seatName,
+        seatClass
       });
     },
 

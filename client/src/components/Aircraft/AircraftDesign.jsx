@@ -186,3 +186,4 @@ const AircraftDesign = ({ seatClassData }) => {
 };
 
 export default AircraftDesign;
+
