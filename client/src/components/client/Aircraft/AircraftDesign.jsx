@@ -85,7 +85,6 @@ const AircraftDesign = ({ seatClassData }) => {
                   (seat) => seat?._id === item?._id
                 );
                 const isBooked = item.seatStatus === "booked";
-                const isAvailable = item.seatStatus === "available";
                 const isLocked = item.locked === true;
                 const seatName = getSeatName(rowIndex, colIndex);
 

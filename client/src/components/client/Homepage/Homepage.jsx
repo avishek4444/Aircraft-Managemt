@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container } from "@mantine/core";
 
-import SearchFlight from "components/SearchFlight/SearchFlight";
+import SearchFlight from "components/client/SearchFlight/SearchFlight";
 import { Outlet } from "react-router-dom";
 
 const Homepage = () => {
