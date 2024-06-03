@@ -61,8 +61,8 @@ const ChooseFlight = () => {
               <div>
                 <Text className="text-left flex items-center gap-3s">
                   {item?.name}
-                  <IconArrowNarrowRight />
-                  {seatClassNames}
+                  {/* <IconArrowNarrowRight /> */}
+                  
                 </Text>
                 <Text c="dimmed" size="sm">
                   Number of Seats: {numOfSeats} • Available Seats:{" "}

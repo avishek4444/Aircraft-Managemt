@@ -45,7 +45,7 @@ const AircraftDesign = ({ seatClassData }) => {
     (seatClassData?.name === "Business Class" && "blue") ||
     (seatClassData?.name === "Economy Class" && "green");
 
-  const seatClassName = `p-2 text-white w-[44px] h-[50px] bg-[${seatColor}] hover:bg-[#4287f5] cursor-pointer`;
+  const seatClassName = ` p-1 text-white w-[44px] h-[50px] bg-[${seatColor}] hover:bg-[#4287f5] cursor-pointer`;
 
   const selectAndUnselectSeats = (seatId, seatName) => {
     const selectedSeatIndex = selectedSeat.findIndex((c) => c?._id === seatId);
@@ -99,7 +99,7 @@ const AircraftDesign = ({ seatClassData }) => {
                   >
                     <div
                       key={colIndex}
-                      className="m-2 hover:!bg-[#8db6f7]"
+                      className="m-2 hover:!bg-[#8db6f7] rounded-md overflow-hidden" 
                       onClick={() =>
                         selectAndUnselectSeats(item?._id, seatName)
                       }
@@ -150,7 +150,7 @@ const AircraftDesign = ({ seatClassData }) => {
                   >
                     <div
                       key={colIndex}
-                      className="m-2"
+                      className="m-2 rounded-md overflow-hidden"
                       onClick={() =>
                         selectAndUnselectSeats(item?._id, seatName)
                       }

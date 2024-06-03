@@ -1,13 +1,10 @@
 import { Button, Tooltip } from "@mantine/core";
 import axios from "axios";
-import React from "react";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { useQuery } from "react-query";
 const BookingHistory = () => {
   const auth = useAuthUser();
   const userId = auth.id;
-
-  console.log(userId);
 
   const { data, isLoading } = useQuery({
     queryKey: ["bookingHistory", userId],
@@ -20,7 +17,6 @@ const BookingHistory = () => {
     },
   });
 
-  console.log(data);
   return (
     <div className="py-10 w-full mx-auto max-w-3xl text-center">
       <h1 className="my-5 text-3xl font-semibold">Your Booking History</h1>
