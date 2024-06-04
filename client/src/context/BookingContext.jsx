@@ -12,6 +12,7 @@ import axios from "axios";
 import { useMutation } from "react-query";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { useForm } from "@mantine/form";
 
 export const BookingProvider = ({ children }) => {
   
@@ -60,7 +61,7 @@ export const BookingProvider = ({ children }) => {
       });
     },
     queryKey: ["aircraft", aircraftId],
-    mutationKey: "bla"
+    mutationKey: ["bla"]
   });
 
   const {mutate:lockSeat, isLoading} = useMutation({
@@ -89,8 +90,21 @@ export const BookingProvider = ({ children }) => {
       });
     },
     queryKey: ["aircraft", aircraftId],
-    mutationKey: "bla"
+    mutationKey: ["bla"]
   })
+
+  const form = useForm({
+    initialValues: {
+      seatClass: "",
+      noOfTraveller: "",
+      from: "",
+      to: "",
+      departureData: "",
+    },
+  });
+  
+
+  // console.log(selectedSeat);
 
   return (
     <BookingContext.Provider
@@ -101,7 +115,8 @@ export const BookingProvider = ({ children }) => {
         setNameOfClass,
         bookSeat,
         setAircraftId,
-        lockSeat
+        lockSeat,
+        form
       }}
     >
       {children}

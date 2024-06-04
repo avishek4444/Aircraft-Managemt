@@ -17,6 +17,8 @@ const BookingHistory = () => {
     },
   });
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="py-10 w-full mx-auto max-w-3xl text-center">
       <h1 className="my-5 text-3xl font-semibold">Your Booking History</h1>

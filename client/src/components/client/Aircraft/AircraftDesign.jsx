@@ -1,10 +1,12 @@
 import { Tooltip } from "@mantine/core";
 import { useBooking } from "context/BookingContext";
+import { useEffect, forwardRef, useImperativeHandle } from "react";
 
-const AircraftDesign = ({ seatClassData }) => {
-  const { selectedSeat, setSelectedSeat } = useBooking();
-
+const AircraftDesign = forwardRef(({ seatClassData, aircraftClassData }, ref) => {
+  const { selectedSeat, setSelectedSeat, form } = useBooking();
   const aircraftData = seatClassData?.seats;
+
+  // console.log(seatClassData);
 
   // Determine the number of columns on each side based on the class type
   const numColumns = seatClassData?.name === "First Class" ? 2 : 3;
@@ -74,6 +76,40 @@ const AircraftDesign = ({ seatClassData }) => {
     return `${startingRowNumber + rowIndex}${columnLetter}`;
   };
 
+  // Function to select seats automatically based on form values
+  const autoSelectSeats = () => {
+    // Check if form values are available
+
+    // console.log(aircraftClassData);
+
+    const seatClassName =
+    (form.values.seatClass === "First Class" && "firstClass" ) ||
+    (form.values.seatClass === "Business Class" && "businessClass") ||
+    (form.values.seatClass === "Economy Class" && "economyClass");
+
+    // const seatClassData = seatClassData.
+    if (form.values.seatClass && form.values.noOfTraveller) {
+      const availableSeats = aircraftClassData.seatClass?.[seatClassName].seats.filter(
+        (seat) => seat.seatStatus === "available"
+      );
+
+      // Check if there are enough available seats
+      if (availableSeats.length >= form.values.noOfTraveller) {
+        // Select the required number of seats
+        const selected = availableSeats.slice(0, form.values.noOfTraveller);
+        setSelectedSeat(selected);
+      } else {
+        // Not enough available seats, show an alert or handle it accordingly
+        alert("Not enough available seats in the selected class.");
+      }
+    }
+  };
+
+  // Expose autoSelectSeats to parent
+  useImperativeHandle(ref, () => ({
+    autoSelectSeats
+  }));
+
   return (
     <div className="px-10">
       <div className={`flex flex-1 gap-10 justify-center`}>
@@ -98,7 +134,7 @@ const AircraftDesign = ({ seatClassData }) => {
                   >
                     <div
                       key={colIndex}
-                      className="m-2 hover:!bg-[#8db6f7] rounded-md overflow-hidden" 
+                      className="m-2 hover:!bg-[#8db6f7] rounded-md overflow-hidden"
                       onClick={() =>
                         selectAndUnselectSeats(item?._id, seatName)
                       }
@@ -107,7 +143,7 @@ const AircraftDesign = ({ seatClassData }) => {
                         style={{
                           backgroundColor: isBooked
                             ? "black"
-                            : isLocked 
+                            : isLocked
                             ? "pink"
                             : isSelected
                             ? "#8db6f7"
@@ -182,7 +218,9 @@ const AircraftDesign = ({ seatClassData }) => {
       </div>
     </div>
   );
-};
+});
+
+// Set display name for the component
+AircraftDesign.displayName = "AircraftDesign";
 
 export default AircraftDesign;
-

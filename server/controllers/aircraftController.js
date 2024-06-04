@@ -269,11 +269,11 @@ const searchAircraft = async (req, res) => {
 
   const query = {};
 
-  if (seatClass) {
-    query[`seatClass.${seatClass}.availableSeats`] = {
-      $gte: parseInt(noOfTraveller),
-    };
-  }
+  // if (seatClass) {
+  //   query[`seatClass.${seatClass}.availableSeats`] = {
+  //     $gte: parseInt(noOfTraveller),
+  //   };
+  // }
 
   if (from) {
     query["destination.from"] = { $in: from.split(",") };

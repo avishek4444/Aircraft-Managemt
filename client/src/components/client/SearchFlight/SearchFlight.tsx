@@ -1,11 +1,12 @@
 import React from "react";
 
 import { Group, Title, Button, Select } from "@mantine/core";
-import { useForm } from "@mantine/form";
+
 
 import { IconCheck, IconPlaneInflight } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import {useBooking} from "context/BookingContext";
+
 
 import "@mantine/dates/styles.css";
 import { Link } from "react-router-dom";
@@ -18,15 +19,7 @@ const SearchFlight = ({ setFlightList }) => {
   const navigate = useNavigate();
   const {setSelectedSeat} = useBooking()
 
-  const form = useForm({
-    initialValues: {
-      seatClass: "",
-      noOfTraveller: "",
-      from: "",
-      to: "",
-      departureData: "",
-    },
-  });
+  const { form } = useBooking();
 
   const classNameModifier = () => {
     if (form.values.seatClass === "First Class") {
@@ -62,7 +55,7 @@ const SearchFlight = ({ setFlightList }) => {
         setSelectedSeat([])
         setFlightList(data?.data);
       }
-      navigate("/chooseflight?" + `class=${classNameModifier()}`);
+      navigate("/chooseflight");
     },
   });
 
@@ -81,23 +74,7 @@ const SearchFlight = ({ setFlightList }) => {
 
       <div className="flex flex-col items-center">
         <div className="flex gap-2">
-          <Select
-            required={true}
-            label="Select Class"
-            placeholder="Class"
-            data={["First Class", "Business Class", "Economy Class"]}
-            {...form.getInputProps("seatClass")}
-            searchable
-            className="cursor-pointer"
-          />
-          <Select
-            label="No. Of Traveller"
-            placeholder="Traveller"
-            data={["1", "2", "3", "4", "5", "6"]}
-            {...form.getInputProps("noOfTraveller")}
-            required={true}
-            searchable
-          />
+          
         </div>
 
         <div className="flex items-center gap-2 my-5">

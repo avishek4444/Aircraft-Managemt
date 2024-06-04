@@ -2,16 +2,14 @@ import React from "react";
 import { useState } from "react";
 import { Group, Code } from "@mantine/core";
 import {
-  IconUserScan,
-  IconUserDollar,
   IconLogout,
-  IconMailForward,
-  IconPresentationAnalytics,
-  IconAward,
   IconPlaneTilt
 } from "@tabler/icons-react";
 import classes from "./NavbarSimple.module.css";
 import { NavLink } from "react-router-dom";
+
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import { useNavigate } from "react-router-dom";
 
 const data = [
   { link: "/admin", label: "Aircafts", icon: IconPlaneTilt },
@@ -19,6 +17,13 @@ const data = [
 
 export default function NavbarSimple() {
   const [active, setActive] = useState("Aircafts");
+  const signOut = useSignOut()
+  const navigate = useNavigate()
+
+  const adminSignOut = () => {
+    signOut();
+    navigate("/");
+  }
 
   const links = data.map((item) => (
     <NavLink
@@ -40,10 +45,10 @@ export default function NavbarSimple() {
       <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
-        <NavLink to="/" className={classes.link}>
+        <button onClick={adminSignOut} className={classes.link}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
-        </NavLink>
+        </button>
       </div>
     </nav>
   );

@@ -51,7 +51,7 @@ const ChooseFlight = () => {
 
           return (
             <Link
-              to={item?._id + `?class=${seatClassName}`}
+              to={item?._id}
               key={index}
               className=" items-center gap-4 bg-[#3B3B3B] text-white inline-flex px-4 py-4 rounded-lg hover:scale-105 transition-all ease-in-out duration-[0.3s] "
             >

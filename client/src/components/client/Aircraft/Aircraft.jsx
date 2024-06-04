@@ -1,6 +1,6 @@
-import { Text } from "@mantine/core";
+import { Select, Text } from "@mantine/core";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import AircraftDesign from "./AircraftDesign";
@@ -17,7 +17,11 @@ const Aircraft = () => {
   const nameOfClass = searchParams.get("class");
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
-  const { setNameOfClass, selectedSeat, setAircraftId, lockSeat } = useBooking();
+  const { setNameOfClass, selectedSeat, setAircraftId, lockSeat, form } =
+    useBooking();
+  
+  // Create refs for the child components
+  const aircraftDesignRef = useRef(null);
 
   const { data, isLoading, error } = useQuery({
     queryFn: async () => {
@@ -28,14 +32,13 @@ const Aircraft = () => {
     },
 
     queryKey: ["aircraft", id, "bla"],
-    
   });
 
   const proceedToBooking = () => {
     if (isAuthenticated) {
       setNameOfClass(nameOfClass);
-      setAircraftId(id)
-      lockSeat(id)
+      setAircraftId(id);
+      lockSeat(id);
       return navigate("/checkout/" + id);
     } else {
       navigate("/login?navigate=true");
@@ -63,9 +66,49 @@ const Aircraft = () => {
     },
   ];
 
+  if (isLoading) return <div>Loading...</div>;
+
+  // console.log(selectedSeat);
+
+  const applyFilter = () => {
+    if (aircraftDesignRef.current) {
+      aircraftDesignRef.current.autoSelectSeats();
+    }
+  };
+
   return (
     <div className=" border-l-2 border-indigo-500 h-full w-full flex flex-col items-center pt-4">
       <h1 className="text-3xl font-bold underline">{data?.name}</h1>
+
+      <form className="pt-5" onSubmit={form.onSubmit(() => applyFilter())}>
+        <div className="flex gap-10 items-center ">
+          <Select
+            required={true}
+            label="Select Class"
+            placeholder="Class"
+            data={["First Class", "Business Class", "Economy Class"]}
+            {...form.getInputProps("seatClass")}
+            searchable
+            
+            className="cursor-pointer"
+          />
+          <Select
+            label="No. Of Traveller"
+            placeholder="Traveller"
+            data={["1", "2", "3", "4", "5", "6"]}
+            {...form.getInputProps("noOfTraveller")}
+            required={true}
+            searchable
+          />
+
+          <button
+            type="submit"
+            className="bg-[#4287f5] hover:bg-orange-700 text-white px-5 py-1 rounded-md mt-6"
+          >
+            Apply
+          </button>
+        </div>
+      </form>
 
       <ColorDefination />
 
@@ -111,7 +154,7 @@ const Aircraft = () => {
         <div className="flex flex-col overflow-y-scroll">
           {classData.map((item, index) => {
             return (
-              <AircraftDesign key={index} seatClassData={item.classDetail} />
+              <AircraftDesign key={index} ref={aircraftDesignRef} seatClassData={item.classDetail} aircraftClassData={data} />
             );
           })}
         </div>

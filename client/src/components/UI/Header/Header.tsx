@@ -26,7 +26,11 @@ export default function HeaderSimple() {
           <h2 className="font-semibold">Aircraft System</h2>
         </Link>
         <Group gap={10} visibleFrom="xs">
-          {isAuthenticated && <Button>Booking History</Button>}
+          {isAuthenticated && (
+            <Link to="bookinghistory">
+              <Button>Booking History</Button>
+            </Link>
+          )}
           {isAuthenticated ? (
             <Button
               onClick={logout}

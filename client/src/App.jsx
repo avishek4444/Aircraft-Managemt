@@ -14,12 +14,8 @@ import Checkout from "components/client/Checkout/Checkout";
 import {BookingProvider} from "./context/BookingContext";
 import BookingHistory from "components/client/BookingHistory/BookingHistory";
 import AdminLayout from "components/AdminLayout";
-import AdminHomePage from "./components/admin/HomePage/HomePage";
-import AircraftListing from "./components/admin/AircraftListing";
-
-
-
-
+import AircraftListing from "components/admin/AircraftListing";
+import AddAircraft from "./components/admin/AddAircraft/AddAircraft";
 
 
 import "@mantine/notifications/styles.css";
@@ -49,7 +45,7 @@ function App() {
           <Route path="admin" element={<AdminLayout />}>
             {/* <Route path="" element={<AdminHomePage />} /> */}
             <Route path="" element={<AircraftListing />} />
-            {/* <Route path="admin/bookings" element={<Bookings />} /> */}
+            <Route path="addaircraft" element={<AddAircraft />} />
           </Route>
           <Route
             path="*"
